@@ -165,7 +165,7 @@ public class MapManager {
 		Mario2 mario2 = getMario2();
 
 		Point cameraLocation = engine.getCameraLocation();
-		double rightCameraBounary = cameraLocation.x + 1920 - 48;
+		double rightCameraBounary = cameraLocation.x + engine.screenSize.width - 48;
 
 		if (mario.getX() >= rightCameraBounary) {
 			mario.setVelX(0);

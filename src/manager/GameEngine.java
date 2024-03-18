@@ -11,8 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameEngine implements Runnable {
-
-	private final static int WIDTH = 1920, HEIGHT = 1080;
+	public Rectangle screenSize;
 
 	private MapManager mapManager;
 	private UIManager uiManager;
@@ -30,11 +29,16 @@ public class GameEngine implements Runnable {
 	}
 
 	private void init() {
+		this.screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+
 		imageLoader = new ImageLoader();
 		// InputManager inputManager = new InputManager(this);
 		gameStatus = GameStatus.START_SCREEN;
 		camera = new Camera();
-		uiManager = new UIManager(this, WIDTH, HEIGHT);
+		uiManager = new UIManager(this, screenWidth, screenHeight);
 		soundManager = new SoundManager();
 		mapManager = new MapManager();
 
@@ -168,7 +172,7 @@ public class GameEngine implements Runnable {
 		double midpoint = (maxX + minX) / 2;
 
 		double cameraX = camera.getX();
-		double cameraXMax = cameraX + 1920 - 48;
+		double cameraXMax = cameraX + this.screenSize.width - 48;
 		double midCam = (cameraX + cameraXMax) / 2;
 
 		// Testing purpose
