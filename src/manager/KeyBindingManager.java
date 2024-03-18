@@ -73,7 +73,7 @@ public class KeyBindingManager {
 		});
 
 		this.bindKey(KeyEvent.VK_SPACE, "VK_SPACE_Action", () -> {
-			engine.receiveInputMario2(ButtonAction.M_FIRE);
+			engine.receiveInputMario(ButtonAction.M_FIRE);
 			return null;
 		});
 

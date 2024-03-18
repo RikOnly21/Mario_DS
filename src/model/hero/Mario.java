@@ -32,7 +32,7 @@ public class Mario extends GameObject {
 		BufferedImage[] rightFrames = imageLoader.getRightFrames(MarioForm.SMALL);
 
 		Animation animation = new Animation(leftFrames, rightFrames);
-		marioForm = new MarioForm(animation, false, false);
+		marioForm = new MarioForm(animation, false, false, "mario");
 		setStyle(marioForm.getCurrentStyle(toRight, false, false));
 	}
 

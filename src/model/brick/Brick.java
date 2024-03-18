@@ -34,7 +34,7 @@ public abstract class Brick extends GameObject {
 		this.empty = empty;
 	}
 
-	public Prize reveal(GameEngine engine) {
+	public Prize reveal(GameEngine engine, String whichMario) {
 		return null;
 	}
 

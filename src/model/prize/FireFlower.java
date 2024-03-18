@@ -26,7 +26,7 @@ public class FireFlower extends BoostItem {
 			BufferedImage[] rightFrames = imageLoader.getRightFrames(MarioForm.FIRE);
 
 			Animation animation = new Animation(leftFrames, rightFrames);
-			MarioForm newForm = new MarioForm(animation, true, true);
+			MarioForm newForm = new MarioForm(animation, true, true, "mario");
 			mario.setMarioForm(newForm);
 			mario.setDimension(48, 96);
 
@@ -48,7 +48,7 @@ public class FireFlower extends BoostItem {
 			BufferedImage[] rightFrames = imageLoader.getRightFrames2(MarioForm.FIRE);
 
 			Animation animation = new Animation(leftFrames, rightFrames);
-			MarioForm newForm = new MarioForm(animation, true, true);
+			MarioForm newForm = new MarioForm(animation, true, true, "mario2");
 			mario2.setMarioForm(newForm);
 			mario2.setDimension(48, 96);
 

@@ -1,12 +1,10 @@
 package model.brick;
 
-import manager.GameEngine;
-import model.Map;
-import model.hero.Mario;
-import model.prize.Prize;
-import view.ImageLoader;
-
 import java.awt.image.BufferedImage;
+
+import manager.GameEngine;
+import model.prize.Coin;
+import model.prize.Prize;
 
 public class SurpriseBrick extends Brick{
 
@@ -20,12 +18,17 @@ public class SurpriseBrick extends Brick{
     }
 
     @Override
-    public Prize reveal(GameEngine engine){
+    public Prize reveal(GameEngine engine, String whichMario) {
         BufferedImage newStyle = engine.getImageLoader().loadImage("/sprite.png");
         newStyle = engine.getImageLoader().getSubImage(newStyle, 1, 2, 48, 48);
 
-        if(prize != null){
+        if (prize != null) {
             prize.reveal();
+        }
+
+        if (prize instanceof Coin) {
+            if (whichMario == "mario") prize.onTouch(engine.getMapManager().getMario(), engine);
+            else if (whichMario == "mario2") prize.onTouch2(engine.getMapManager().getMario2(), engine);
         }
 
         setEmpty(true);
@@ -33,6 +36,7 @@ public class SurpriseBrick extends Brick{
 
         Prize toReturn = this.prize;
         this.prize = null;
+
         return toReturn;
     }
 

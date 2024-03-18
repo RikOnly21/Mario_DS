@@ -36,8 +36,8 @@ public class MapManager {
 		Mario mario = getMario();
 		Mario2 mario2 = getMario2();
 
-		mario.resetPoint();
-		mario2.resetPoint();
+		// mario.resetPoint();
+		// mario2.resetPoint();
 
 		mario.resetLocation();
 		mario2.resetLocation();
@@ -61,7 +61,6 @@ public class MapManager {
 	}
 
 	public void acquirePoints2(int point) {
-		// tạo bảng points riêng ( chưa làm )
 		map.getMario2().acquirePoints(point);
 	}
 
@@ -76,7 +75,7 @@ public class MapManager {
 	public void fire(GameEngine engine) {
 		Fireball fireball = getMario().fire();
 		if (fireball != null) {
-			map.addFireball(fireball);
+			map.addFireball(fireball, "mario");
 			engine.playFireball();
 		}
 	}
@@ -84,7 +83,7 @@ public class MapManager {
 	public void fire2(GameEngine engine) {
 		Fireball fireball = getMario2().fire();
 		if (fireball != null) {
-			map.addFireball(fireball);
+			map.addFireball(fireball, "mario2");
 			engine.playFireball();
 		}
 	}
@@ -230,7 +229,7 @@ public class MapManager {
 				if (brick instanceof OrdinaryBrick) {
 					brick.breakBrick(engine, mario);
 				} else {
-					Prize prize = brick.reveal(engine);
+					Prize prize = brick.reveal(engine, "mario");
 					if (prize != null)
 						map.addRevealedPrize(prize);
 				}
@@ -291,7 +290,7 @@ public class MapManager {
 				if (brick instanceof OrdinaryBrick) {
 					brick.breakBrick2(engine, mario2);
 				} else {
-					Prize prize = brick.reveal(engine);
+					Prize prize = brick.reveal(engine, "mario2");
 					if (prize != null)
 						map.addRevealedPrize(prize);
 				}
@@ -445,9 +444,11 @@ public class MapManager {
 						if (brickBounds.intersects(prizeBottomBounds)) {
 							boost.setFalling(false);
 							boost.setVelY(0);
+
 							boost.setY(brick.getY() - boost.getDimension().height + 1);
-							if (boost.getVelX() == 0)
+							if (boost.getVelX() == 0) { 
 								boost.setVelX(2);
+							}
 						}
 					}
 
@@ -457,6 +458,7 @@ public class MapManager {
 						if (brickBounds.intersects(prizeRightBounds)) {
 							boost.setVelX(-boost.getVelX());
 						}
+
 					} else if (boost.getVelX() < 0) {
 						brickBounds = brick.getRightBounds();
 
@@ -491,15 +493,11 @@ public class MapManager {
 			if (prizeBounds.intersects(marioBounds)) {
 				prize.onTouch(getMario(), engine);
 				toBeRemoved.add((GameObject) prize);
-			} else if (prize instanceof Coin) {
-				prize.onTouch(getMario(), engine);
 			}
 
 			if (prizeBounds.intersects(marioBounds2)) {
 				prize.onTouch2(getMario2(), engine);
 				toBeRemoved.add((GameObject) prize);
-			} else if (prize instanceof Coin) {
-				prize.onTouch(getMario(), engine);
 			}
 		}
 
@@ -518,7 +516,9 @@ public class MapManager {
 			for (Enemy enemy : enemies) {
 				Rectangle enemyBounds = enemy.getBounds();
 				if (fireballBounds.intersects(enemyBounds)) {
-					acquirePoints(100);
+					if (fireball.whichMario == "mario") acquirePoints(100);
+					else if (fireball.whichMario == "mario2") acquirePoints2(100);
+
 					toBeRemoved.add(enemy);
 					toBeRemoved.add(fireball);
 				}

@@ -26,7 +26,7 @@ public class SuperMushroom extends BoostItem {
 			BufferedImage[] rightFrames = imageLoader.getRightFrames(MarioForm.SUPER);
 
 			Animation animation = new Animation(leftFrames, rightFrames);
-			MarioForm newForm = new MarioForm(animation, true, false);
+			MarioForm newForm = new MarioForm(animation, true, false, "mario");
 			mario.setMarioForm(newForm);
 			mario.setDimension(48, 96);
 
@@ -44,7 +44,7 @@ public class SuperMushroom extends BoostItem {
 			BufferedImage[] rightFrames = imageLoader.getRightFrames2(MarioForm.SUPER);
 
 			Animation animation = new Animation(leftFrames, rightFrames);
-			MarioForm newForm = new MarioForm(animation, true, false);
+			MarioForm newForm = new MarioForm(animation, true, false, "mario2");
 			mario2.setMarioForm(newForm);
 			mario2.setDimension(48, 96);
 

@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameEngine implements Runnable {
-	public Rectangle screenSize;
+	public Dimension screenSize;
 
 	private MapManager mapManager;
 	private UIManager uiManager;
@@ -29,7 +29,7 @@ public class GameEngine implements Runnable {
 	}
 
 	private void init() {
-		this.screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         int screenWidth = screenSize.width;
         int screenHeight = screenSize.height;
@@ -51,7 +51,7 @@ public class GameEngine implements Runnable {
 		frame.pack();
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		frame.setResizable(true);
+		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
@@ -321,7 +321,11 @@ public class GameEngine implements Runnable {
 	}
 
 	public int getScore() {
-		return mapManager.getScore() + mapManager.getScore2();
+		return mapManager.getScore();
+	}
+
+	public int getScore2() {
+		return mapManager.getScore2();
 	}
 
 	public int getRemainingLives() {

@@ -187,7 +187,7 @@ public class Map {
 		revealedPrizes.add(prize);
 	}
 
-	public void addFireball(Fireball fireball) {
+	public void addFireball(Fireball fireball, String whichMario) {
 		fireballs.add(fireball);
 	}
 

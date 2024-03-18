@@ -7,15 +7,17 @@ import java.awt.image.BufferedImage;
 
 public class MarioForm {
 	public static final int SMALL = 0, SUPER = 1, FIRE = 2;
+	public String whichMario;
 
 	private Animation animation;
 	private boolean isSuper, isFire; // note: fire form has priority over super form
 	private BufferedImage fireballStyle;
 
-	public MarioForm(Animation animation, boolean isSuper, boolean isFire) {
+	public MarioForm(Animation animation, boolean isSuper, boolean isFire, String whichMario) {
 		this.animation = animation;
 		this.isSuper = isSuper;
 		this.isFire = isFire;
+		this.whichMario = whichMario;
 
 		ImageLoader imageLoader = new ImageLoader();
 		BufferedImage fireball = imageLoader.loadImage("/sprite.png");
@@ -48,7 +50,7 @@ public class MarioForm {
 
 		Animation newAnimation = new Animation(leftFrames, rightFrames);
 
-		return new MarioForm(newAnimation, false, false);
+		return new MarioForm(newAnimation, false, false, "mario");
 	}
 
 	public MarioForm onTouchEnemy2(ImageLoader imageLoader) {
@@ -57,12 +59,12 @@ public class MarioForm {
 
 		Animation newAnimation = new Animation(leftFrames, rightFrames);
 
-		return new MarioForm(newAnimation, false, false);
+		return new MarioForm(newAnimation, false, false, "mario2");
 	}
 
 	public Fireball fire(boolean toRight, double x, double y) {
 		if (isFire) {
-			return new Fireball(x, y + 48, fireballStyle, toRight);
+			return new Fireball(x, y + 48, fireballStyle, toRight, this.whichMario);
 		}
 		return null;
 	}
