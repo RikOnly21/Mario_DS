@@ -20,6 +20,7 @@ public class Map {
 	private double remainingTime;
 	private Mario mario;
 	private Mario2 mario2;
+	
 	private ArrayList<Brick> bricks = new ArrayList<>();
 	private ArrayList<Enemy> enemies = new ArrayList<>();
 	private ArrayList<Brick> groundBricks = new ArrayList<>();

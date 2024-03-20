@@ -1,7 +1,7 @@
 package view;
 
 import java.awt.*;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
@@ -44,9 +44,14 @@ public class MapSelection {
 	}
 
 	private void getMaps() {
-		// TODO: read from file
-		maps.add("Map.png");
-		maps.add("Map2.png");
+		File folder = new File("./src/media/maps/");
+		File[] listOfFiles = folder.listFiles();
+
+		for (File file : listOfFiles) {
+			if (file.isFile() && file.getName().endsWith(".png")) {
+				maps.add(file.getName());
+			}
+		}
 	}
 
 	private MapSelectionItem[] createItems(ArrayList<String> maps) {

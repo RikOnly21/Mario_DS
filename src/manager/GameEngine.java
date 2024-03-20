@@ -1,14 +1,18 @@
 package manager;
 
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import model.hero.Mario;
 import model.hero.Mario2;
 import view.ImageLoader;
 import view.StartScreenSelection;
 import view.UIManager;
-import javax.swing.*;
-import java.awt.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class GameEngine implements Runnable {
 	public Dimension screenSize;

@@ -36,10 +36,10 @@ class MapCreator {
 		this.oneUpMushroom = imageLoader.getSubImage(sprite, 3, 5, 48, 48);
 		this.fireFlower = imageLoader.getSubImage(sprite, 4, 5, 48, 48);
 		this.coin = imageLoader.getSubImage(sprite, 1, 5, 48, 48);
-		this.ordinaryBrick = imageLoader.getSubImage(sprite, 1, 1, 48, 48);
+		this.ordinaryBrick = imageLoader.getSubImage(sprite, 1, 1, 48, 48);//cục gạch phá đc
 		this.surpriseBrick = imageLoader.getSubImage(sprite, 2, 1, 48, 48);
-		this.groundBrick = imageLoader.getSubImage(sprite, 2, 2, 48, 48);
-		this.pipe = imageLoader.getSubImage(sprite, 3, 1, 96, 96);
+		this.groundBrick = imageLoader.getSubImage(sprite, 2, 2, 48, 48);//bậc thang
+		this.pipe = imageLoader.getSubImage(sprite, 3, 1, 96, 96);//ống
 		this.goombaLeft = imageLoader.getSubImage(sprite, 2, 4, 48, 48);
 		this.goombaRight = imageLoader.getSubImage(sprite, 5, 4, 48, 48);
 		this.koopaLeft = imageLoader.getSubImage(sprite, 1, 3, 48, 64);

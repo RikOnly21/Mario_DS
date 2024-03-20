@@ -83,7 +83,7 @@ public class UIManager extends JPanel {
 				drawVictoryScreen(g2);
 			}
 		}
-
+		
 		g2.dispose();
 	}
 
