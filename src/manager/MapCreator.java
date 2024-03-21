@@ -11,7 +11,7 @@ import model.enemy.Goomba;
 import model.enemy.IEnemyFactory;
 import model.enemy.KoopaTroopa;
 import model.hero.Mario;
-import model.hero.Mario2;
+
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -103,12 +103,12 @@ class MapCreator {
 					((KoopaTroopa) enemy).setRightImage(koopaRight);
 					createdMap.addEnemy(enemy);
 				} else if (currentPixel == mario) {
-					Mario marioObject = new Mario(xLocation, yLocation);
-					createdMap.setMario(marioObject);
+					Mario marioObject = new Mario(xLocation, yLocation,"mario");
+					createdMap.setMario(marioObject,"mario");
 
 				} else if (currentPixel == mario2) {
-					Mario2 mario2Object = new Mario2(xLocation, yLocation);
-					createdMap.setMario2(mario2Object);
+					Mario mario2Object = new Mario(xLocation, yLocation,"mario2");
+					createdMap.setMario(mario2Object,"mario2");
 				} else if (currentPixel == end) {
 					EndFlag endPoint = new EndFlag(xLocation + 24, yLocation, endFlag);
 					createdMap.setEndPoint(endPoint);

@@ -12,7 +12,7 @@ import model.brick.OrdinaryBrick;
 import model.enemy.Enemy;
 import model.hero.Fireball;
 import model.hero.Mario;
-import model.hero.Mario2;
+
 import model.prize.BoostItem;
 import model.prize.Coin;
 import model.prize.Prize;
@@ -33,8 +33,9 @@ public class MapManager {
 	}
 
 	public void resetCurrentMap(GameEngine engine) {
-		Mario mario = getMario();
-		Mario2 mario2 = getMario2();
+		Mario mario = getMario("mario");
+		Mario mario2 = getMario("mario2");
+		
 
 		// mario.resetPoint();
 		// mario2.resetPoint();
@@ -45,8 +46,8 @@ public class MapManager {
 		engine.resetCamera();
 		createMap(engine.getImageLoader(), map.getPath());
 
-		map.setMario(mario);
-		map.setMario2(mario2);
+		map.setMario(mario,"mario");
+		map.setMario(mario2,"mario2");
 	}
 
 	public boolean createMap(ImageLoader loader, String path) {
@@ -56,24 +57,18 @@ public class MapManager {
 		return map != null;
 	}
 
-	public void acquirePoints(int point) {
-		map.getMario().acquirePoints(point);
+	public void acquirePoints(int point,String whichmario) {
+		
+		map.getMario(whichmario).acquirePoints(point);
+		
 	}
 
-	public void acquirePoints2(int point) {
-		map.getMario2().acquirePoints(point);
-	}
-
-	public Mario getMario() {
-		return map.getMario();
-	}
-
-	public Mario2 getMario2() {
-		return map.getMario2();
+	public Mario getMario(String whichMario) {
+		return map.getMario(whichMario);
 	}
 
 	public void fire(GameEngine engine) {
-		Fireball fireball = getMario().fire();
+		Fireball fireball = getMario("mario").fire();
 		if (fireball != null) {
 			map.addFireball(fireball, "mario");
 			engine.playFireball();
@@ -81,7 +76,7 @@ public class MapManager {
 	}
 
 	public void fire2(GameEngine engine) {
-		Fireball fireball = getMario2().fire();
+		Fireball fireball = getMario("mario2").fire();
 		if (fireball != null) {
 			map.addFireball(fireball, "mario2");
 			engine.playFireball();
@@ -90,53 +85,46 @@ public class MapManager {
 
 	public boolean isGameOver() {
 		// 1 trong 2 thằng chết hoặc hết thời gian
-		return (getMario().getRemainingLives() + getMario2().getRemainingLives()) == 0 || map.isTimeOver();
+		return (getMario("mario").getRemainingLives() + getMario("mario2").getRemainingLives()) == 0 || map.isTimeOver();
 	}
 
-	public int getScore() {
-		return getMario().getPoints();
+	public int getScore(String whichMario) {
+		return getMario(whichMario).getPoints();
 	}
 
-	public int getScore2() {
-		return getMario2().getPoints();
+	
+	public int getRemainingLives(String whichMario) {
+		return getMario(whichMario).getRemainingLives();
 	}
 
-	public int getRemainingLives() {
-		return getMario().getRemainingLives();
+	
+
+	public int getCoins(String whichMario) {
+		return getMario(whichMario).getCoins();
 	}
 
-	public int getRemainingLives2() {
-		return getMario2().getRemainingLives();
-	}
-
-	public int getCoins() {
-		return getMario().getCoins();
-	}
-
-	public int getCoins2() {
-		return getMario2().getCoins();
-	}
+	
 
 	public void drawMap(Graphics2D g2) {
 		map.drawMap(g2);
 	}
 
 	public int passMission() {
-		if ((getMario().getX() >= map.getEndPoint().getX() && !map.getEndPoint().isTouched())
-				|| (getMario2().getX() >= map.getEndPoint().getX() && !map.getEndPoint().isTouched())) {
+		if ((getMario("mario").getX() >= map.getEndPoint().getX() && !map.getEndPoint().isTouched())
+				|| (getMario("mario2").getX() >= map.getEndPoint().getX() && !map.getEndPoint().isTouched())) {
 			map.getEndPoint().setTouched(true);
-			int height = (int) getMario().getY();
+			int height = (int) getMario("mario").getY();
 			return height * 2;
 		} else
 			return -1;
 	}
 
 	public boolean endLevel() {
-		return getMario().getX() >= map.getEndPoint().getX() + 320;
+		return getMario("mario").getX() >= map.getEndPoint().getX() + 320;
 	}
 
 	public boolean endLevel2() {
-		return getMario2().getX() >= map.getEndPoint().getX() + 320;
+		return getMario("mario2").getX() >= map.getEndPoint().getX() + 320;
 	}
 
 	public void checkCollisions(GameEngine engine) {
@@ -160,9 +148,9 @@ public class MapManager {
 	}
 
 	private void checkCameraCollisions(GameEngine engine) {
-		Mario mario = getMario();
-		Mario2 mario2 = getMario2();
-
+		Mario mario = getMario("mario");
+		Mario mario2 = getMario("mario2");
+		
 		Point cameraLocation = engine.getCameraLocation();
 		double rightCameraBounary = cameraLocation.x + engine.screenSize.width - 48;
 
@@ -178,7 +166,7 @@ public class MapManager {
 	}
 
 	private void checkBottomCollisions(GameEngine engine) {
-		Mario mario = getMario();
+		Mario mario = getMario("mario");
 		ArrayList<Brick> bricks = map.getAllBricks();
 		ArrayList<Enemy> enemies = map.getEnemies();
 		ArrayList<GameObject> toBeRemoved = new ArrayList<>();
@@ -216,7 +204,7 @@ public class MapManager {
 	}
 
 	private void checkTopCollisions(GameEngine engine) {
-		Mario mario = getMario();
+		Mario mario = getMario("mario");
 		ArrayList<Brick> bricks = map.getAllBricks();
 		Rectangle marioTopBounds = mario.getTopBounds();
 
@@ -237,73 +225,13 @@ public class MapManager {
 			}
 		}
 	}
-
-	private void checkBottomCollisions2(GameEngine engine) {
-		Mario2 mario2 = getMario2();
-		ArrayList<Brick> bricks = map.getAllBricks();
-		ArrayList<Enemy> enemies = map.getEnemies();
-		ArrayList<GameObject> toBeRemoved = new ArrayList<>();
-
-		Rectangle marioBottomBounds2 = mario2.getBottomBounds();
-
-		if (!mario2.isJumping()) {
-			mario2.setFalling(true);
-		}
-		for (Brick brick : bricks) {
-			Rectangle brickTopBounds2 = brick.getTopBounds();
-			if (marioBottomBounds2.intersects(brickTopBounds2)) {
-				mario2.setY(brick.getY() - mario2.getDimension().height + 1);
-				mario2.setFalling(false);
-				mario2.setVelY(0);
-			}
-		}
-
-		for (Enemy enemy : enemies) {
-			Rectangle enemyTopBounds2 = enemy.getTopBounds();
-			if (marioBottomBounds2.intersects(enemyTopBounds2)) {
-				mario2.acquirePoints(100);
-				toBeRemoved.add(enemy);
-				engine.playStomp();
-			}
-		}
-
-		if (mario2.getY() + mario2.getDimension().height >= map.getBottomBorder()) {
-			mario2.setY(map.getBottomBorder() - mario2.getDimension().height);
-			mario2.setFalling(false);
-			mario2.setVelY(0);
-		}
-
-		removeObjects(toBeRemoved);
-	}
-
-	private void checkTopCollisions2(GameEngine engine) {
-		Mario2 mario2 = getMario2();
-		ArrayList<Brick> bricks = map.getAllBricks();
-		Rectangle marioTopBounds2 = mario2.getTopBounds();
-
-		for (Brick brick : bricks) {
-			Rectangle brickBottomBounds2 = brick.getBottomBounds();
-			if (marioTopBounds2.intersects(brickBottomBounds2)) {
-				mario2.setVelY(0);
-				mario2.setY(brick.getY() + brick.getDimension().height);
-
-				if (brick instanceof OrdinaryBrick) {
-					brick.breakBrick2(engine, mario2);
-				} else {
-					Prize prize = brick.reveal(engine, "mario2");
-					if (prize != null)
-						map.addRevealedPrize(prize);
-				}
-			}
-		}
-	}
-
 	private void checkMarioHorizontalCollision(GameEngine engine) {
-		Mario mario = getMario();
+		Mario mario = getMario("mario");
 		ArrayList<Brick> bricks = map.getAllBricks();
+		
 		ArrayList<Enemy> enemies = map.getEnemies();
 		ArrayList<GameObject> toBeRemoved = new ArrayList<>();
-
+ 
 		boolean marioDies = false;
 		boolean toRight = mario.getToRight();
 
@@ -339,8 +267,73 @@ public class MapManager {
 		}
 	}
 
+
+	private void checkBottomCollisions2(GameEngine engine) {
+		Mario mario = getMario("mario2");
+
+		ArrayList<Brick> bricks = map.getAllBricks();
+		ArrayList<Enemy> enemies = map.getEnemies();
+		ArrayList<GameObject> toBeRemoved = new ArrayList<>();
+
+		Rectangle marioBottomBounds = mario.getBottomBounds();
+
+		System.out.println(mario.getWhichMario());
+
+		if (!mario.isJumping())
+			mario.setFalling(true);
+
+		for (Brick brick : bricks) {
+			Rectangle brickTopBounds = brick.getTopBounds();
+			if (marioBottomBounds.intersects(brickTopBounds)) {
+				mario.setY(brick.getY() - mario.getDimension().height + 1);
+				mario.setFalling(false);
+				mario.setVelY(0);
+			}
+		}
+
+		for (Enemy enemy : enemies) {
+			Rectangle enemyTopBounds = enemy.getTopBounds();
+			if (marioBottomBounds.intersects(enemyTopBounds)) {
+				mario.acquirePoints(100);
+				toBeRemoved.add(enemy);
+				engine.playStomp();
+			}
+		}
+
+		if (mario.getY() + mario.getDimension().height >= map.getBottomBorder()) {
+			mario.setY(map.getBottomBorder() - mario.getDimension().height);
+			mario.setFalling(false);
+			mario.setVelY(0);
+		}
+
+		removeObjects(toBeRemoved);
+	}
+
+	private void checkTopCollisions2(GameEngine engine) {
+		Mario mario2 = getMario("mario2");
+		ArrayList<Brick> bricks = map.getAllBricks();
+		Rectangle marioTopBounds2 = mario2.getTopBounds();
+
+		for (Brick brick : bricks) {
+			Rectangle brickBottomBounds2 = brick.getBottomBounds();
+			if (marioTopBounds2.intersects(brickBottomBounds2)) {
+				mario2.setVelY(0);
+				mario2.setY(brick.getY() + brick.getDimension().height);
+
+				if (brick instanceof OrdinaryBrick) {
+					brick.breakBrick2(engine, mario2);
+				} else {
+					Prize prize = brick.reveal(engine, "mario2");
+					if (prize != null)
+						map.addRevealedPrize(prize);
+				}
+			}
+		}
+	}
+
+	
 	private void checkMarioHorizontalCollision2(GameEngine engine) {
-		Mario2 mario2 = getMario2();
+		Mario mario2 = getMario("mario2");
 		ArrayList<Brick> bricks = map.getAllBricks();
 		ArrayList<Enemy> enemies = map.getEnemies();
 		ArrayList<GameObject> toBeRemoved = new ArrayList<>();
@@ -484,19 +477,19 @@ public class MapManager {
 		ArrayList<Prize> prizes = map.getRevealedPrizes();
 		ArrayList<GameObject> toBeRemoved = new ArrayList<>();
 
-		Rectangle marioBounds = getMario().getBounds();
-		Rectangle marioBounds2 = getMario2().getBounds();
+		Rectangle marioBounds = getMario("mario").getBounds();
+		Rectangle marioBounds2 = getMario("mario2").getBounds();
 
 		for (Prize prize : prizes) {
 			Rectangle prizeBounds = prize.getBounds();
 
 			if (prizeBounds.intersects(marioBounds)) {
-				prize.onTouch(getMario(), engine);
+				prize.onTouch(getMario("mario"), engine);
 				toBeRemoved.add((GameObject) prize);
 			}
 
 			if (prizeBounds.intersects(marioBounds2)) {
-				prize.onTouch2(getMario2(), engine);
+				prize.onTouch2(getMario("mario2"), engine);
 				toBeRemoved.add((GameObject) prize);
 			}
 		}
@@ -516,8 +509,8 @@ public class MapManager {
 			for (Enemy enemy : enemies) {
 				Rectangle enemyBounds = enemy.getBounds();
 				if (fireballBounds.intersects(enemyBounds)) {
-					if (fireball.whichMario == "mario") acquirePoints(100);
-					else if (fireball.whichMario == "mario2") acquirePoints2(100);
+					if (fireball.whichMario == "mario") acquirePoints(100,"mario");
+					else if (fireball.whichMario == "mario2") acquirePoints(100,"mario2");
 
 					toBeRemoved.add(enemy);
 					toBeRemoved.add(fireball);

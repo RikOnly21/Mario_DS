@@ -9,7 +9,7 @@ import view.ImageLoader;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Mario extends GameObject {
+public class Mario extends GameObject implements Cloneable{
 
 	private int remainingLives;
 	private int coins;
@@ -17,8 +17,11 @@ public class Mario extends GameObject {
 	private double invincibilityTimer;
 	private MarioForm marioForm;
 	private boolean toRight = true;
+	private String whichMario;
 
-	public Mario(double x, double y) {
+	private ImageLoader imageLoader;
+
+	public Mario(double x, double y, String whichMario) {
 		super(x, y, null);
 		setDimension(48, 48);
 
@@ -26,21 +29,37 @@ public class Mario extends GameObject {
 		points = 0;
 		coins = 0;
 		invincibilityTimer = 0;
+		this.whichMario = whichMario;
 
-		ImageLoader imageLoader = new ImageLoader();
-		BufferedImage[] leftFrames = imageLoader.getLeftFrames(MarioForm.SMALL);
-		BufferedImage[] rightFrames = imageLoader.getRightFrames(MarioForm.SMALL);
+		imageLoader = new ImageLoader();
+		BufferedImage[] leftFrames;
+		BufferedImage[] rightFrames;
 
+		if (whichMario == "mario") {
+			leftFrames = imageLoader.getLeftFrames(MarioForm.SMALL);
+			rightFrames = imageLoader.getRightFrames(MarioForm.SMALL);
+		} else {
+			leftFrames = imageLoader.getLeftFrames2(MarioForm.SMALL);
+			rightFrames = imageLoader.getRightFrames2(MarioForm.SMALL);
+		}
+		
 		Animation animation = new Animation(leftFrames, rightFrames);
-		marioForm = new MarioForm(animation, false, false, "mario");
+		marioForm = new MarioForm(animation, false, false, whichMario);
 		setStyle(marioForm.getCurrentStyle(toRight, false, false));
+	}
+
+	public void setWhichMario(String whichMario) {
+		this.whichMario=whichMario;
+	}
+
+	public String getWhichMario() {
+		return this.whichMario;
 	}
 
 	@Override
 	public void draw(Graphics g) {
 		boolean movingInX = (getVelX() != 0);
 		boolean movingInY = (getVelY() != 0);
-
 		setStyle(marioForm.getCurrentStyle(toRight, movingInX, movingInY));
 
 		super.draw(g);
@@ -90,7 +109,7 @@ public class Mario extends GameObject {
 	}
 
 	public void acquirePoints(int point) {
-		points = points + point;
+		points += point;
 	}
 
 	public int getRemainingLives() {
@@ -131,5 +150,33 @@ public class Mario extends GameObject {
 		setX(60);
 		setJumping(false);
 		setFalling(true);
+
+		BufferedImage[] leftFrames;
+		BufferedImage[] rightFrames;
+
+		if (whichMario == "mario") {
+			leftFrames = imageLoader.getLeftFrames(MarioForm.SMALL);
+			rightFrames = imageLoader.getRightFrames(MarioForm.SMALL);
+		} else {
+			leftFrames = imageLoader.getLeftFrames2(MarioForm.SMALL);
+			rightFrames = imageLoader.getRightFrames2(MarioForm.SMALL);
+		}
+
+		Animation animation = new Animation(leftFrames, rightFrames);
+		marioForm = new MarioForm(animation, false, false, whichMario);
+		setStyle(marioForm.getCurrentStyle(toRight, false, false));
+
+		setDimension(48, 48);
 	}
+
+	@Override
+    public Mario clone() {
+        try {
+            // Gọi clone() từ lớp Object để tạo bản sao của đối tượng này
+            return (Mario) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // Xử lý ngoại lệ, ví dụ: trả về null hoặc tạo mới đối tượng
+            return null;
+        }
+    }
 }

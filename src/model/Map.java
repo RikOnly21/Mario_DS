@@ -5,7 +5,7 @@ import model.brick.OrdinaryBrick;
 import model.enemy.Enemy;
 import model.hero.Fireball;
 import model.hero.Mario;
-import model.hero.Mario2;
+
 import model.prize.BoostItem;
 import model.prize.Coin;
 import model.prize.Prize;
@@ -19,7 +19,7 @@ public class Map {
 
 	private double remainingTime;
 	private Mario mario;
-	private Mario2 mario2;
+	private Mario mario2;
 	
 	private ArrayList<Brick> bricks = new ArrayList<>();
 	private ArrayList<Enemy> enemies = new ArrayList<>();
@@ -27,6 +27,7 @@ public class Map {
 	private ArrayList<Prize> revealedPrizes = new ArrayList<>();
 	private ArrayList<Brick> revealedBricks = new ArrayList<>();
 	private ArrayList<Fireball> fireballs = new ArrayList<>();
+	
 	private EndFlag endPoint;
 	private BufferedImage backgroundImage;
 	private double bottomBorder = 720 - 96;
@@ -37,20 +38,22 @@ public class Map {
 		this.remainingTime = remainingTime;
 	}
 
-	public Mario getMario() {
-		return mario;
+	public Mario getMario(String whichMario) {
+		if (whichMario == "mario") {
+			return mario;
+		}
+		else {
+			return mario2;
+		}	
 	}
 
-	public void setMario(Mario mario) {
-		this.mario = mario;
-	}
-
-	public Mario2 getMario2() {
-		return mario2;
-	}
-
-	public void setMario2(Mario2 mario2) {
-		this.mario2 = mario2;
+	public void setMario(Mario mario,String whichMario) {
+		if (whichMario == "mario") {
+			this.mario = mario;
+		}
+		else {
+			this.mario2 = mario;
+		}
 	}
 
 	public ArrayList<Enemy> getEnemies() {
@@ -148,6 +151,7 @@ public class Map {
 	public void updateLocations() {
 		mario.updateLocation();
 		mario2.updateLocation();
+		
 		for (Enemy enemy : enemies) {
 			enemy.updateLocation();
 		}

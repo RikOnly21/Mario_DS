@@ -27,8 +27,9 @@ public class SurpriseBrick extends Brick{
         }
 
         if (prize instanceof Coin) {
-            if (whichMario == "mario") prize.onTouch(engine.getMapManager().getMario(), engine);
-            else if (whichMario == "mario2") prize.onTouch2(engine.getMapManager().getMario2(), engine);
+            if (whichMario == "mario") prize.onTouch(engine.getMapManager().getMario("mario"), engine);
+            else if (whichMario == "mario2") prize.onTouch2(engine.getMapManager().getMario("mario2"), engine);
+            
         }
 
         setEmpty(true);
