@@ -4,7 +4,7 @@ import manager.GameEngine;
 import model.GameObject;
 import model.Map;
 import model.hero.Mario;
-import model.hero.Mario2;
+
 import model.prize.Prize;
 
 import java.awt.image.BufferedImage;
@@ -17,6 +17,7 @@ public abstract class Brick extends GameObject {
 		super(x, y, style);
 		setDimension(48, 48);
 	}
+	
 
 	public boolean isBreakable() {
 		return breakable;
@@ -42,7 +43,7 @@ public abstract class Brick extends GameObject {
 		return;
 	}
 
-	public void breakBrick2(GameEngine engine, Mario2 mario) {
+	public void breakBrick2(GameEngine engine, Mario mario2) {
 		return;
 	}
 

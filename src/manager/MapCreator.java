@@ -5,11 +5,13 @@ import model.brick.*;
 import model.prize.*;
 import view.ImageLoader;
 import model.Map;
+import model.enemy.ConcreteEnemyFactory;
 import model.enemy.Enemy;
 import model.enemy.Goomba;
+import model.enemy.IEnemyFactory;
 import model.enemy.KoopaTroopa;
 import model.hero.Mario;
-import model.hero.Mario2;
+
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,7 +26,8 @@ class MapCreator {
 	private BufferedImage superMushroom, oneUpMushroom, fireFlower, coin;
 	private BufferedImage ordinaryBrick, surpriseBrick, groundBrick, pipe;
 	private BufferedImage goombaLeft, goombaRight, koopaLeft, koopaRight, endFlag;
-
+	private IBirckFactory brickfatory= new ConcreteBrickFactory();
+	private IEnemyFactory enemyfactory= new ConcreteEnemyFactory();
 	MapCreator(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
 		this.random = new Random();
@@ -79,33 +82,33 @@ class MapCreator {
 				int yLocation = y * pixelMultiplier;
 
 				if (currentPixel == ordinaryBrick) {
-					Brick brick = new OrdinaryBrick(xLocation, yLocation, this.ordinaryBrick);
+					Brick brick = brickfatory.createBrick("ordinary",xLocation, yLocation, this.ordinaryBrick,null);
 					createdMap.addBrick(brick);
 				} else if (currentPixel == surpriseBrick) {
 					Prize prize = generateRandomPrize(xLocation, yLocation);
-					Brick brick = new SurpriseBrick(xLocation, yLocation, this.surpriseBrick, prize);
+					Brick brick = brickfatory.createBrick("surprise",xLocation, yLocation, this.surpriseBrick, prize);
 					createdMap.addBrick(brick);
 				} else if (currentPixel == pipe) {
-					Brick brick = new Pipe(xLocation, yLocation, this.pipe);
+					Brick brick = brickfatory.createBrick("pipe",xLocation, yLocation, this.pipe,null);
 					createdMap.addGroundBrick(brick);
 				} else if (currentPixel == groundBrick) {
-					Brick brick = new GroundBrick(xLocation, yLocation, this.groundBrick);
+					Brick brick = brickfatory.createBrick("ground",xLocation, yLocation, this.groundBrick,null);
 					createdMap.addGroundBrick(brick);
 				} else if (currentPixel == goomba) {
-					Enemy enemy = new Goomba(xLocation, yLocation, this.goombaLeft);
+					Enemy enemy = enemyfactory.createEnemy("goomba",xLocation, yLocation, this.goombaLeft);
 					((Goomba) enemy).setRightImage(goombaRight);
 					createdMap.addEnemy(enemy);
 				} else if (currentPixel == koopa) {
-					Enemy enemy = new KoopaTroopa(xLocation, yLocation, this.koopaLeft);
+					Enemy enemy =  enemyfactory.createEnemy("koopatroopa",xLocation, yLocation, this.koopaLeft);
 					((KoopaTroopa) enemy).setRightImage(koopaRight);
 					createdMap.addEnemy(enemy);
 				} else if (currentPixel == mario) {
-					Mario marioObject = new Mario(xLocation, yLocation);
-					createdMap.setMario(marioObject);
+					Mario marioObject = new Mario(xLocation, yLocation,"mario");
+					createdMap.setMario(marioObject,"mario");
 
 				} else if (currentPixel == mario2) {
-					Mario2 mario2Object = new Mario2(xLocation, yLocation);
-					createdMap.setMario2(mario2Object);
+					Mario mario2Object = new Mario(xLocation, yLocation,"mario2");
+					createdMap.setMario(mario2Object,"mario2");
 				} else if (currentPixel == end) {
 					EndFlag endPoint = new EndFlag(xLocation + 24, yLocation, endFlag);
 					createdMap.setEndPoint(endPoint);

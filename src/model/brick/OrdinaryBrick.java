@@ -5,7 +5,7 @@ import manager.MapManager;
 import model.GameObject;
 import model.Map;
 import model.hero.Mario;
-import model.hero.Mario2;
+
 import model.prize.Prize;
 import view.Animation;
 import view.ImageLoader;
@@ -53,10 +53,10 @@ public class OrdinaryBrick extends Brick {
 	}
 
 	@Override
-	public void breakBrick2(GameEngine engine, Mario2 mario) {
+	public void breakBrick2(GameEngine engine, Mario mario2) {
 		MapManager manager = engine.getMapManager();
 
-		if (!mario.isSuper())
+		if (!mario2.isSuper())
 			return;
 
 		breaking = true;

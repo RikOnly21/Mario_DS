@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import model.hero.Mario;
-import model.hero.Mario2;
+
 import view.ImageLoader;
 import view.StartScreenSelection;
 import view.UIManager;
@@ -157,7 +157,7 @@ public class GameEngine implements Runnable {
 
 		int missionPassed = passMission();
 		if (missionPassed > -1) {
-			mapManager.acquirePoints(missionPassed);
+			mapManager.acquirePoints(missionPassed,"mario");
 			setGameStatus(GameStatus.MISSION_PASSED);
 		} else if (mapManager.endLevel()) {
 			setGameStatus(GameStatus.MISSION_PASSED);
@@ -165,8 +165,8 @@ public class GameEngine implements Runnable {
 	}
 
 	private void updateCamera() {
-		Mario mario = mapManager.getMario();
-		Mario2 mario2 = mapManager.getMario2();
+		Mario mario = mapManager.getMario("mario");
+		Mario mario2 = mapManager.getMario("mario2");
 
 		double marioX = mario.getX();
 		double mario2X = mario2.getX();
@@ -203,7 +203,7 @@ public class GameEngine implements Runnable {
 		if (gameStatus != GameStatus.RUNNING)
 			return;
 
-		Mario mario = mapManager.getMario();
+		Mario mario = mapManager.getMario("mario");
 
 		if (input == ButtonAction.M_JUMP) {
 			mario.jump(this);
@@ -222,7 +222,7 @@ public class GameEngine implements Runnable {
 		if (gameStatus != GameStatus.RUNNING)
 			return;
 
-		Mario2 mario2 = mapManager.getMario2();
+		Mario mario2 = mapManager.getMario("mario2");
 
 		if (input == ButtonAction.M2_JUMP) {
 			mario2.jump(this);
@@ -325,19 +325,19 @@ public class GameEngine implements Runnable {
 	}
 
 	public int getScore() {
-		return mapManager.getScore();
+		return mapManager.getScore("mario");
 	}
 
 	public int getScore2() {
-		return mapManager.getScore2();
+		return mapManager.getScore("mario2");
 	}
 
 	public int getRemainingLives() {
-		return mapManager.getRemainingLives() + mapManager.getRemainingLives2();
+		return mapManager.getRemainingLives("mario") + mapManager.getRemainingLives("mario2");
 	}
 
 	public int getCoins() {
-		return mapManager.getCoins() + mapManager.getCoins2();
+		return mapManager.getCoins("mario") + mapManager.getCoins("mario2");
 	}
 
 	public int getSelectedMap() {
