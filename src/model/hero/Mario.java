@@ -167,6 +167,7 @@ public class Mario extends GameObject implements Cloneable{
 		setStyle(marioForm.getCurrentStyle(toRight, false, false));
 
 		setDimension(48, 48);
+		
 	}
 
 	@Override
@@ -178,5 +179,6 @@ public class Mario extends GameObject implements Cloneable{
             // Xử lý ngoại lệ, ví dụ: trả về null hoặc tạo mới đối tượng
             return null;
         }
+		
     }
 }

@@ -4,18 +4,24 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import manager.ScoreManager.GameObserver;
+import manager.ScoreManager.GameSubject;
+import manager.ScoreManager.ScoreSaver;
 import model.hero.Mario;
 
 import view.ImageLoader;
 import view.StartScreenSelection;
 import view.UIManager;
 
-public class GameEngine implements Runnable {
+public class GameEngine extends GameSubject implements Runnable {
 	public Dimension screenSize;
+	List<GameObserver>  observers = new ArrayList<>();
 
 	private MapManager mapManager;
 	private UIManager uiManager;
@@ -35,8 +41,8 @@ public class GameEngine implements Runnable {
 	private void init() {
 		this.screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        int screenWidth = screenSize.width;
-        int screenHeight = screenSize.height;
+		int screenWidth = screenSize.width;
+		int screenHeight = screenSize.height;
 
 		imageLoader = new ImageLoader();
 		// InputManager inputManager = new InputManager(this);
@@ -65,7 +71,8 @@ public class GameEngine implements Runnable {
 	}
 
 	private synchronized void start() {
-		if (isRunning) return;
+		if (isRunning)
+			return;
 
 		isRunning = true;
 		thread = new Thread(this);
@@ -124,9 +131,10 @@ public class GameEngine implements Runnable {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
-			
+
 			while (delta >= 1) {
-				if (gameStatus == GameStatus.RUNNING) gameLoop();
+				if (gameStatus == GameStatus.RUNNING)
+					gameLoop();
 				delta--;
 			}
 			render();
@@ -153,14 +161,16 @@ public class GameEngine implements Runnable {
 
 		if (isGameOver()) {
 			setGameStatus(GameStatus.GAME_OVER);
+			endGame();
 		}
 
 		int missionPassed = passMission();
 		if (missionPassed > -1) {
-			mapManager.acquirePoints(missionPassed,"mario");
+			mapManager.acquirePoints(missionPassed, "mario");
 			setGameStatus(GameStatus.MISSION_PASSED);
 		} else if (mapManager.endLevel()) {
 			setGameStatus(GameStatus.MISSION_PASSED);
+			endGame();
 		}
 	}
 
@@ -181,8 +191,9 @@ public class GameEngine implements Runnable {
 
 		// Testing purpose
 		// System.out.println(
-		// 	"Midcam: " + midCam + " Camera X (Max): " + cameraXMax + " Camera X: " + cameraX + 
-		// 	" Midpoint: " + midpoint + " Mario X: " + marioX + " Mario2 X: " + mario2X
+		// "Midcam: " + midCam + " Camera X (Max): " + cameraXMax + " Camera X: " +
+		// cameraX +
+		// " Midpoint: " + midpoint + " Mario X: " + marioX + " Mario2 X: " + mario2X
 		// );
 
 		camera.moveCam(midpoint - midCam);
@@ -245,6 +256,8 @@ public class GameEngine implements Runnable {
 				setGameStatus(GameStatus.ABOUT_SCREEN);
 			} else if (input == ButtonAction.SELECT && startScreenSelection == StartScreenSelection.VIEW_HELP) {
 				setGameStatus(GameStatus.HELP_SCREEN);
+			} else if (input == ButtonAction.SELECT && startScreenSelection == StartScreenSelection.GAME_SCORE) {
+				setGameStatus(GameStatus.GAME_SCORE);
 			} else if (input == ButtonAction.GO_UP) {
 				selectOption(true);
 			} else if (input == ButtonAction.GO_DOWN) {
@@ -392,8 +405,37 @@ public class GameEngine implements Runnable {
 		return mapManager;
 	}
 
+	// override lại các phương thức của class gamesubject
+	public void attach(GameObserver observer) {
+		observers.add(observer);
+	}
+
+	// Phương thức để hủy đăng ký một observer
+	public void detach(GameObserver observer) {
+		observers.remove(observer);
+	}
+
+	// Phương thức thông báo cho tất cả observers
+	public void notifyObservers() {
+		for (GameObserver observer : observers) {
+			observer.update(this);
+		}
+	}
+
+	private void endGame() {
+
+		// Thông báo cho observers
+		notifyObservers();
+
+	}
+
 	public static void main(String... args) {
-		new GameEngine();
+		GameEngine gameEngine = new GameEngine();
+
+		// Đăng ký một observer để lưu điểm
+		ScoreSaver scoreSaver = new ScoreSaver("./src/media/score/score.txt");
+		gameEngine.attach(scoreSaver);
+
 	}
 
 	public int getRemainingTime() {

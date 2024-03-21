@@ -1,0 +1,2 @@
+Mario: 0 Mario2: 50
+Mario: 350 Mario2: 400

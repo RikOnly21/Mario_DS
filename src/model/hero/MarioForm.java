@@ -45,21 +45,21 @@ public class MarioForm {
 	}
 
 	public MarioForm onTouchEnemy(ImageLoader imageLoader) {
-		BufferedImage[] leftFrames = imageLoader.getLeftFrames(0);
-		BufferedImage[] rightFrames = imageLoader.getRightFrames(0);
 
+		BufferedImage[] leftFrames;
+		BufferedImage[] rightFrames;
+
+		if (whichMario == "mario") {
+			leftFrames = imageLoader.getLeftFrames(MarioForm.SMALL);
+			rightFrames = imageLoader.getRightFrames(MarioForm.SMALL);
+		} else {
+			leftFrames = imageLoader.getLeftFrames2(MarioForm.SMALL);
+			rightFrames = imageLoader.getRightFrames2(MarioForm.SMALL);
+		}
 		Animation newAnimation = new Animation(leftFrames, rightFrames);
 
-		return new MarioForm(newAnimation, false, false, "mario");
-	}
+		return new MarioForm(newAnimation, false, false, whichMario);
 
-	public MarioForm onTouchEnemy2(ImageLoader imageLoader) {
-		BufferedImage[] leftFrames = imageLoader.getLeftFrames2(0);
-		BufferedImage[] rightFrames = imageLoader.getRightFrames2(0);
-
-		Animation newAnimation = new Animation(leftFrames, rightFrames);
-
-		return new MarioForm(newAnimation, false, false, "mario2");
 	}
 
 	public Fireball fire(boolean toRight, double x, double y) {

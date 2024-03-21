@@ -113,8 +113,9 @@ public class MapManager {
 		if ((getMario("mario").getX() >= map.getEndPoint().getX() && !map.getEndPoint().isTouched())
 				|| (getMario("mario2").getX() >= map.getEndPoint().getX() && !map.getEndPoint().isTouched())) {
 			map.getEndPoint().setTouched(true);
-			int height = (int) getMario("mario").getY();
-			return height * 2;
+			int max= Math.max((int) getMario("mario").getY(),(int) getMario("mario2").getY());
+			
+			return max * 2;
 		} else
 			return -1;
 	}
@@ -276,8 +277,6 @@ public class MapManager {
 		ArrayList<GameObject> toBeRemoved = new ArrayList<>();
 
 		Rectangle marioBottomBounds = mario.getBottomBounds();
-
-		System.out.println(mario.getWhichMario());
 
 		if (!mario.isJumping())
 			mario.setFalling(true);

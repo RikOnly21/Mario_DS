@@ -6,15 +6,19 @@ import manager.GameStatus;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UIManager extends JPanel {
 
 	private GameEngine engine;
 	private Font gameFont;
-	private BufferedImage startScreenImage, aboutScreenImage, helpScreenImage, gameOverScreen;
+	private BufferedImage startScreenImage, aboutScreenImage, helpScreenImage, gameOverScreen,gameScore;
 	private BufferedImage heartIcon;
 	private BufferedImage coinIcon;
 	private BufferedImage selectIcon;
@@ -39,7 +43,7 @@ public class UIManager extends JPanel {
 		this.helpScreenImage = loader.loadImage("/help-screen.png");
 		this.aboutScreenImage = loader.loadImage("/about-screen.png");
 		this.gameOverScreen = loader.loadImage("/game-over.png");
-
+		this.gameScore=loader.loadImage("/game-score.jpg");
 		try {
 			InputStream in = getClass().getResourceAsStream("/media/font/mario-font.ttf");
 			gameFont = Font.createFont(Font.TRUETYPE_FONT, in);
@@ -55,10 +59,10 @@ public class UIManager extends JPanel {
 
 		Graphics2D g2 = (Graphics2D) g.create();
 		GameStatus gameStatus = engine.getGameStatus();
-
 		if (gameStatus == GameStatus.START_SCREEN) {
 			drawStartScreen(g2);
 		} else if (gameStatus == GameStatus.MAP_SELECTION) {
+			
 			drawMapSelectionScreen(g2);
 		} else if (gameStatus == GameStatus.ABOUT_SCREEN) {
 			drawAboutScreen(g2);
@@ -66,6 +70,11 @@ public class UIManager extends JPanel {
 			drawHelpScreen(g2);
 		} else if (gameStatus == GameStatus.GAME_OVER) {
 			drawGameOverScreen(g2);
+		} else if(gameStatus==GameStatus.GAME_SCORE){
+			
+			List<String> scores = readScoresFromFile("./src/media/score/score.txt"); // Specify the correct file name
+            drawScoreList(g2, scores);
+
 		} else {
 			Point camLocation = engine.getCameraLocation();
 			g2.translate(-camLocation.x, -camLocation.y);
@@ -122,6 +131,7 @@ public class UIManager extends JPanel {
 		g2.drawString(acquiredPoints, (getWidth() - stringLength) / 2, getHeight() - stringHeight * 2);
 	}
 
+	
 	private void drawPauseScreen(Graphics2D g2) {
 		g2.setFont(gameFont.deriveFont(50f));
 		g2.setColor(Color.WHITE);
@@ -180,6 +190,35 @@ public class UIManager extends JPanel {
 
 		g2.drawImage(selectIcon, this.getWidth() / 4, y_location, null);
 	}
+
+
+	private void drawScoreList(Graphics2D g2, List<String> scores) {
+		g2.drawImage(gameScore, 0, 0, this.getWidth(), this.getHeight(), null);
+        g2.setFont(gameFont.deriveFont(24f)); // Set the font size
+        g2.setColor(Color.WHITE); // Set the color
+
+        int x = 300; // X position to start drawing scores
+        int y = 100; // Starting Y position for the first score
+        int yDelta = 30; // Distance between scores
+
+        for (String score : scores) {
+            g2.drawString(score, x, y);
+            y += yDelta; // Move down to the next line
+        }
+    }
+
+	 private List<String> readScoresFromFile(String fileName) {
+        List<String> scores = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                scores.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return scores;
+    }
 
 	public String selectMapViaMouse(Point mouseLocation) {
 		return mapSelection.selectMap(mouseLocation);
