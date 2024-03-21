@@ -17,6 +17,7 @@ public abstract class Brick extends GameObject {
 		super(x, y, style);
 		setDimension(48, 48);
 	}
+	
 
 	public boolean isBreakable() {
 		return breakable;
