@@ -16,7 +16,12 @@ public abstract class GameObject {
 	private double gravityAcc;
 
 	private boolean falling, jumping;
+	
+	public GameObject() {
+	}
 
+	
+	
 	public GameObject(double x, double y, BufferedImage style) {
 		setLocation(x, y);
 		setStyle(style);

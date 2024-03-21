@@ -1,7 +1,7 @@
 package model.brick;
 
 import java.awt.image.BufferedImage;
-
+import model.brick.*;
 import manager.GameEngine;
 import model.prize.Coin;
 import model.prize.Prize;
@@ -45,4 +45,5 @@ public class SurpriseBrick extends Brick{
     public Prize getPrize(){
         return prize;
     }
+   
 }

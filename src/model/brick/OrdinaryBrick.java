@@ -78,4 +78,5 @@ public class OrdinaryBrick extends Brick {
 			frames--;
 		}
 	}
+	
 }
