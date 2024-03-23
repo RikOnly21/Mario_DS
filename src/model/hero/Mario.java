@@ -9,7 +9,7 @@ import view.ImageLoader;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Mario extends GameObject implements Cloneable{
+public class Mario extends GameObject implements IMario{
 
 	private int remainingLives;
 	private int coins;
@@ -20,7 +20,22 @@ public class Mario extends GameObject implements Cloneable{
 	private String whichMario;
 
 	private ImageLoader imageLoader;
+	public Mario(Mario mario){
+		super(mario.getX(), mario.getY(), mario.getStyle()); // Gọi constructor của lớp cha GameObject
+        
+        // Sao chép các thuộc tính từ đối tượng Mario được cung cấp
+        this.remainingLives = mario.remainingLives;
+        this.coins = mario.coins;
+        this.points = mario.points;
+        this.invincibilityTimer = mario.invincibilityTimer;
+        this.marioForm = mario.marioForm; // Điều này chỉ sao chép tham chiếu, xem xét việc sâu hơn nếu cần
+        this.toRight = mario.toRight;
+        this.whichMario = mario.whichMario;
+        this.imageLoader = mario.imageLoader; 
+		
 
+
+	}
 	public Mario(double x, double y, String whichMario) {
 		super(x, y, null);
 		setDimension(48, 48);
@@ -55,6 +70,7 @@ public class Mario extends GameObject implements Cloneable{
 	public String getWhichMario() {
 		return this.whichMario;
 	}
+
 
 	@Override
 	public void draw(Graphics g) {
@@ -167,16 +183,19 @@ public class Mario extends GameObject implements Cloneable{
 		setStyle(marioForm.getCurrentStyle(toRight, false, false));
 
 		setDimension(48, 48);
+		
 	}
 
 	@Override
     public Mario clone() {
         try {
-            // Gọi clone() từ lớp Object để tạo bản sao của đối tượng này
-            return (Mario) super.clone();
-        } catch (CloneNotSupportedException e) {
-            // Xử lý ngoại lệ, ví dụ: trả về null hoặc tạo mới đối tượng
+			//super ở đây là gameobject, clone 
+            return new Mario(this);
+		
+        } catch (Exception e) {
+			e.printStackTrace();
             return null;
         }
+		
     }
 }

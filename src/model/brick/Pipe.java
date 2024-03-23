@@ -10,4 +10,5 @@ public class Pipe extends Brick{
         setEmpty(true);
         setDimension(96, 96);
     }
+   
 }
