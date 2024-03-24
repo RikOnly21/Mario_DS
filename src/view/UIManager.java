@@ -26,7 +26,7 @@ public class UIManager extends JPanel {
 
 	private GameEngine engine;
 	private Font gameFont;
-	private BufferedImage startScreenImage, aboutScreenImage, helpScreenImage, gameOverScreen, gameScore;
+	private BufferedImage startScreenImage, aboutScreenImage, helpScreenImage, gameOverScreen, gameScore,mapScreen;
 	private BufferedImage heartIcon;
 	private BufferedImage coinIcon;
 	private BufferedImage selectIcon;
@@ -47,7 +47,7 @@ public class UIManager extends JPanel {
 		this.coinIcon = loader.getSubImage(sprite, 1, 5, 48, 48);
 		this.selectIcon = loader.loadImage("/select-icon.png");
 		this.startScreenImage = loader.loadImage("/start-screen.png");
-
+		this.mapScreen= loader.loadImage("/map-screen.jpg");
 		this.helpScreenImage = loader.loadImage("/help-screen.png");
 		this.aboutScreenImage = loader.loadImage("/about-screen.png");
 		this.gameOverScreen = loader.loadImage("/game-over.png");
@@ -81,7 +81,11 @@ public class UIManager extends JPanel {
 		} else if (gameStatus == GameStatus.GAME_SCORE) {
 			List<MarioScore> scores = new ArrayList<>();
 			List<String> lines = readScoresFromFile("./src/media/score/score.txt");
-
+			if(lines.size()==0)
+			{
+				drawScoreList(g2, new ArrayList<>() , null);
+				return;
+			}
 			Pattern pattern = Pattern.compile("Mario: (\\d+) - Mario2: (\\d+) - Date: (.+)");
 			for (String line : lines) {
 				Matcher matcher = pattern.matcher(line);
@@ -98,7 +102,8 @@ public class UIManager extends JPanel {
 			scores.sort(Comparator.comparingInt(MarioScore::getTotalScore).reversed());
 			
 			drawScoreList(g2, scores, recentPlay);
-
+		
+		
 		} else {
 			Point camLocation = engine.getCameraLocation();
 			g2.translate(-camLocation.x, -camLocation.y);
@@ -204,9 +209,10 @@ public class UIManager extends JPanel {
 	}
 
 	private void drawMapSelectionScreen(Graphics2D g2) {
+		
 		g2.setFont(gameFont.deriveFont(50f));
 		g2.setColor(Color.WHITE);
-		mapSelection.draw(g2, () -> this.getWidth(), () -> this.getHeight());
+		mapSelection.draw(g2, mapScreen,() -> this.getWidth(), () -> this.getHeight());
 
 		int row = engine.getSelectedMap();
 		int y_location = row * 100 + 300 - selectIcon.getHeight();
