@@ -13,6 +13,7 @@ import javax.swing.WindowConstants;
 import manager.ScoreManager.GameObserver;
 import manager.ScoreManager.GameSubject;
 import manager.ScoreManager.ScoreSaver;
+import model.hero.IMario;
 import model.hero.Mario;
 
 import view.ImageLoader;
@@ -176,7 +177,11 @@ public class GameEngine extends GameSubject implements Runnable {
 
 	private void updateCamera() {
 		Mario mario = mapManager.getMario("mario");
-		Mario mario2 = mapManager.getMario("mario2");
+		
+		IMario i_mario= new Mario(mario);
+		Mario mario2= i_mario.clone();
+
+		mario2.setWhichMario("mario2");
 
 		double marioX = mario.getX();
 		double mario2X = mario2.getX();

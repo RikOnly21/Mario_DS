@@ -11,6 +11,7 @@ import model.brick.Brick;
 import model.brick.OrdinaryBrick;
 import model.enemy.Enemy;
 import model.hero.Fireball;
+import model.hero.IMario;
 import model.hero.Mario;
 
 import model.prize.BoostItem;
@@ -34,8 +35,10 @@ public class MapManager {
 
 	public void resetCurrentMap(GameEngine engine) {
 		Mario mario = getMario("mario");
-		Mario mario2 = getMario("mario2");
+		IMario i_mario= new Mario(mario);
+		Mario mario2= i_mario.clone();
 
+		mario2.setWhichMario("mario2");
 		// mario.resetPoint();
 		// mario2.resetPoint();
 
