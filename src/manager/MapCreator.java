@@ -29,7 +29,7 @@ class MapCreator {
 	private IBirckFactory brickFactory;
 	private IEnemyFactory enemyfactory;
 
-	MapCreator(ImageLoader imageLoader) {
+	public MapCreator(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
 		this.random = new Random();
 
@@ -51,7 +51,7 @@ class MapCreator {
 		this.endFlag = imageLoader.getSubImage(sprite, 5, 1, 48, 48);
 	}
 
-	Map createMap(String mapPath, double timeLimit) {
+	public MapFacade createMap(String mapPath, double timeLimit) {
 		BufferedImage mapImage = imageLoader.loadImage(mapPath);
 
 		if (mapImage == null) {
@@ -59,7 +59,7 @@ class MapCreator {
 			return null;
 		}
 
-		Map createdMap = new Map(timeLimit, backgroundImage);
+		MapFacade createdMap = new MapFacade(timeLimit, backgroundImage);
 		String[] paths = mapPath.split("/");
 		createdMap.setPath(paths[paths.length - 1]);
 

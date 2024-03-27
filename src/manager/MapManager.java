@@ -20,10 +20,11 @@ import model.prize.Prize;
 import view.ImageLoader;
 
 public class MapManager {
+	private static MapManager instance;
 
-	private Map map;
+	private MapFacade map;
 
-	public MapManager() {
+	private MapManager() {
 	}
 
 	public void updateLocations() {
@@ -32,6 +33,13 @@ public class MapManager {
 
 		map.updateLocations();
 	}
+
+	public static synchronized MapManager getInstance() {
+        if (instance == null) {
+            instance = new MapManager();
+        }
+        return instance;
+    }
 
 	public void resetCurrentMap(GameEngine engine) {
 		Mario mario = getMario("mario");
