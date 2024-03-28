@@ -9,7 +9,7 @@ import view.ImageLoader;
 
 import java.awt.image.BufferedImage;
 
-public class FireFlower extends BoostItem {
+public class FireFlower extends BoostItem{
 
 	public FireFlower(double x, double y, BufferedImage style) {
 		super(x, y, style);
@@ -37,8 +37,7 @@ public class FireFlower extends BoostItem {
 	@Override
 	public void updateLocation() {
 	}
-
-	@Override
+        @Override
 	public void onTouch2(Mario mario2, GameEngine engine) {
 		mario2.acquirePoints(getPoint());
 		ImageLoader imageLoader = new ImageLoader();

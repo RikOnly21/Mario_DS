@@ -1,19 +1,18 @@
 package model;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import model.brick.Brick;
 import model.brick.OrdinaryBrick;
 import model.enemy.Enemy;
 import model.hero.Fireball;
 import model.hero.Mario;
-
 import model.prize.BoostItem;
 import model.prize.Coin;
 import model.prize.Prize;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Map {
 
@@ -27,6 +26,8 @@ public class Map {
 	private ArrayList<Prize> revealedPrizes = new ArrayList<>();
 	private ArrayList<Brick> revealedBricks = new ArrayList<>();
 	private ArrayList<Fireball> fireballs = new ArrayList<>();
+        
+        private GameUI gameUI = new GameUI();
 	
 	private EndFlag endPoint;
 	private BufferedImage backgroundImage;
@@ -91,17 +92,40 @@ public class Map {
 
 	public void drawMap(Graphics2D g2) {
 		drawBackground(g2);
-		drawPrizes(g2);
-		drawBricks(g2);
-		drawEnemies(g2);
-		drawFireballs(g2);
-		drawMario(g2);
-		drawMario2(g2);
+//                drawPrizes(g2);
+                // strategy
+                gameUI.addUIDesign(revealedPrizes);
+                gameUI.render(g2);
+                gameUI.clear();
+//		drawBricks(g2);
+                gameUI.addUIDesign(bricks);
+                gameUI.render(g2);
+                gameUI.clear();
+                gameUI.addUIDesign(groundBricks);
+                gameUI.render(g2);
+                gameUI.clear();
+//		drawEnemies(g2);
+                gameUI.addUIDesign(enemies);
+                gameUI.render(g2);
+                gameUI.clear();
+//		drawFireballs(g2);
+                gameUI.addUIDesign(fireballs);
+                gameUI.render(g2);
+                gameUI.clear();
+//		drawMario(g2);
+                gameUI.addUIDesign(mario);
+                gameUI.render(g2);
+                gameUI.clear();
+//		drawMario2(g2);
+                gameUI.addUIDesign(mario2);
+                gameUI.render(g2);
+                gameUI.clear();
 		endPoint.draw(g2);
 	}
 
 	private void drawFireballs(Graphics2D g2) {
 		for (Fireball fireball : fireballs) {
+                    UIDesign design = fireball;
 			fireball.draw(g2);
 		}
 	}

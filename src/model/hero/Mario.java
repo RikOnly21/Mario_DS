@@ -1,13 +1,13 @@
 package model.hero;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
 import manager.Camera;
 import manager.GameEngine;
-import view.Animation;
 import model.GameObject;
+import view.Animation;
 import view.ImageLoader;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class Mario extends GameObject implements IMario{
 
@@ -20,7 +20,7 @@ public class Mario extends GameObject implements IMario{
 	private String whichMario;
 
 	private ImageLoader imageLoader;
-	public Mario(Mario mario){
+	private Mario(Mario mario){
 		super(mario.getX(), mario.getY(), mario.getStyle()); // Gọi constructor của lớp cha GameObject
         
         // Sao chép các thuộc tính từ đối tượng Mario được cung cấp
@@ -36,7 +36,7 @@ public class Mario extends GameObject implements IMario{
 
 
 	}
-	public Mario(double x, double y, String whichMario) {
+	private Mario(double x, double y, String whichMario) {
 		super(x, y, null);
 		setDimension(48, 48);
 
@@ -197,5 +197,43 @@ public class Mario extends GameObject implements IMario{
             return null;
         }
 		
+    }
+    //builder design pattern
+    public static class MarioBuilder {
+        private double x = -1;
+        private double y = -1;
+        private String whichMario;
+        private Mario mario;
+
+        public MarioBuilder() {}
+
+        public MarioBuilder addX(double x) {
+            this.x = x;
+            return this;
+        }
+
+        public MarioBuilder addY(double y) {
+            this.y = y;
+            return this;
+        }
+
+        public MarioBuilder addWhichMario(String whichMario) {
+            this.whichMario = whichMario;
+            return this;
+        }
+        
+        public MarioBuilder addMario(Mario mario) {
+            this.mario = mario;
+            return this;
+        }
+
+        public Mario build() {
+            if(x != -1 && y != -1 && whichMario.length() > 0) {
+                return new Mario(x, y, whichMario);
+            } else if(mario != null){
+                return mario;
+            }
+            return null;
+        }
     }
 }

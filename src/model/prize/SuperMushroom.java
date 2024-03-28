@@ -9,7 +9,7 @@ import view.ImageLoader;
 
 import java.awt.image.BufferedImage;
 
-public class SuperMushroom extends BoostItem {
+public class SuperMushroom extends BoostItem{
 
 	public SuperMushroom(double x, double y, BufferedImage style) {
 		super(x, y, style);
@@ -33,8 +33,7 @@ public class SuperMushroom extends BoostItem {
 			engine.playSuperMushroom();
 		}
 	}
-
-	@Override
+        @Override
 	public void onTouch2(Mario mario2, GameEngine engine) {
 		mario2.acquirePoints(getPoint());
 		ImageLoader imageLoader = new ImageLoader();

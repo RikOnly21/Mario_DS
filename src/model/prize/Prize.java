@@ -6,8 +6,9 @@ import model.hero.Mario;
 
 
 import java.awt.*;
+import model.UIDesign;
 
-public interface Prize {
+public interface Prize extends UIDesign{
 
 	int getPoint();
 

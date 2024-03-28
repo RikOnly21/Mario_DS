@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.function.Supplier;
@@ -10,15 +9,16 @@ public class MapSelection {
 
 	private ArrayList<String> maps = new ArrayList<>();
 	private MapSelectionItem[] mapSelectionItems;
-	private BufferedImage mapScreen;
+
 	public MapSelection() {
 		getMaps();
 		this.mapSelectionItems = createItems(this.maps);
 	}
 
-	public void draw(Graphics g,BufferedImage mapScreen ,Supplier<Integer> getWidth, Supplier<Integer> getHeight) {
-	
-		g.drawImage(mapScreen, 0, 0, getWidth.get(),  getWidth.get(), null);
+	public void draw(Graphics g, Supplier<Integer> getWidth, Supplier<Integer> getHeight) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, getWidth.get(), getWidth.get());
+
 		if (mapSelectionItems == null) {
 			System.out.println(1);
 			return;

@@ -76,32 +76,30 @@ public class KeyBindingManager {
 			engine.receiveInputMario(ButtonAction.M_FIRE);
 			return null;
 		});
-
+ 
 		this.bindKey(KeyEvent.VK_UP, "VK_UP_Action", () -> {
-			engine.receiveInputMario2(ButtonAction.M2_JUMP);
+			engine.receiveInputMario2(ButtonAction.M_JUMP);
 			return null;
 		});
 
 		this.bindKey(KeyEvent.VK_RIGHT, "VK_RIGHT_Action", () -> {
-			engine.receiveInputMario2(ButtonAction.M2_RIGHT);
+			engine.receiveInputMario2(ButtonAction.M_RIGHT);
 			return null;
 		});
 
 		this.bindKey(KeyEvent.VK_LEFT, "VK_LEFT_Action", () -> {
-			engine.receiveInputMario2(ButtonAction.M2_LEFT);
+			engine.receiveInputMario2(ButtonAction.M_LEFT);
 			return null;
 		});
 
-		this.bindKey(KeyEvent.VK_P, "VK_P_Action", () -> {
-			engine.receiveInputMario2(ButtonAction.M2_FIRE);
+		this.bindKey(KeyEvent.VK_0, "VK_P_Action", () -> {
+			engine.receiveInputMario2(ButtonAction.M_FIRE);
 			return null;
 		});
 	}
 
 	private void bindKey(int keyEvent, String actionName, Supplier<ButtonAction> action) {
 		this.inputMap.put(KeyStroke.getKeyStroke(keyEvent, 0, false), actionName + "_Press");
-		this.inputMap.put(KeyStroke.getKeyStroke(keyEvent, 0, true), actionName + "_Release");
-
 		this.actionMap.put(actionName + "_Press", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -114,23 +112,28 @@ public class KeyBindingManager {
 				}
 			};
 		});
+		this.inputMap.put(KeyStroke.getKeyStroke(keyEvent, 0, true), actionName + "_Release");
 
 		this.actionMap.put(actionName + "_Release", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (keyEvent == KeyEvent.VK_D || keyEvent == KeyEvent.VK_A) {
+				if (keyEvent == KeyEvent.VK_D || keyEvent == KeyEvent.VK_A || keyEvent == KeyEvent.VK_W || keyEvent == KeyEvent.VK_SPACE) {
 					engine.receiveInputMario(ButtonAction.ACTION_COMPLETED);
 				}
-
-				if (keyEvent == KeyEvent.VK_RIGHT || keyEvent == KeyEvent.VK_LEFT) {
-					engine.receiveInputMario2(ButtonAction.ACTION_COMPLETED2);
+				if (keyEvent == KeyEvent.VK_RIGHT || keyEvent == KeyEvent.VK_LEFT || keyEvent == KeyEvent.VK_UP || keyEvent == KeyEvent.VK_0 ) {
+					engine.receiveInputMario2(ButtonAction.ACTION_COMPLETED);
 				}
 			};
 		});
+		
 	}
 
 	private void notifyInput(ButtonAction action) {
 		if (action != ButtonAction.NO_ACTION)
 			engine.receiveInput(action);
 	}
+
+	
+
+	
 }

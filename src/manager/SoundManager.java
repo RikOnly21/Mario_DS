@@ -1,28 +1,26 @@
 package manager;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 public class SoundManager {
 	private static SoundManager instance;
-
 	private Clip background;
 	private long clipTime = 0;
 
 	private SoundManager() {
 		background = getClip(loadAudio("background"));
 	}
-
 	public static synchronized SoundManager getInstance() {
         if (instance == null) {
             instance = new SoundManager();
         }
         return instance;
     }
-
 	private AudioInputStream loadAudio(String url) {
 		try {
 			InputStream audioSrc = getClass().getResourceAsStream("/media/audio/" + url + ".wav");

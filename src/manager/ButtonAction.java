@@ -1,10 +1,6 @@
 package manager;
 
 public enum ButtonAction {
-	M2_JUMP,
-	M2_RIGHT,
-	M2_LEFT,
-	M2_FIRE,
 	M_JUMP,
 	M_RIGHT,
 	M_LEFT,

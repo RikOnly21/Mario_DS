@@ -1,3 +1,5 @@
-Mario: 0 - Mario2: 200 - Date: 2024-03-24 12:59:53 
-Mario: 51256 - Mario2: 11206 - Date: 2024-03-24 13:09:03 
-Mario: 100 - Mario2: 200 - Date: 2024-03-24 22:11:29 
+Mario: 0 Mario2: 50
+Mario: 350 Mario2: 400
+Mario: 50 Mario2: 0
+Mario: 0 Mario2: 200
+Mario: 0 Mario2: 450

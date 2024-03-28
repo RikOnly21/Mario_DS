@@ -1,33 +1,30 @@
 package view;
 
-import manager.GameEngine;
-import manager.GameStatus;
-import manager.ScoreManager.MarioScore;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import javax.swing.JPanel;
+
+import manager.GameEngine;
+import manager.GameStatus;
 
 public class UIManager extends JPanel {
 	private static UIManager instance;
-
 	private GameEngine engine;
 	private Font gameFont;
-	private BufferedImage startScreenImage, aboutScreenImage, helpScreenImage, gameOverScreen, gameScore,mapScreen;
+	private BufferedImage startScreenImage, aboutScreenImage, helpScreenImage, gameOverScreen,gameScore;
 	private BufferedImage heartIcon;
 	private BufferedImage coinIcon;
 	private BufferedImage selectIcon;
@@ -47,12 +44,12 @@ public class UIManager extends JPanel {
 		this.heartIcon = loader.loadImage("/heart-icon.png");
 		this.coinIcon = loader.getSubImage(sprite, 1, 5, 48, 48);
 		this.selectIcon = loader.loadImage("/select-icon.png");
-		this.startScreenImage = loader.loadImage("/start-screen.png");
-		this.mapScreen= loader.loadImage("/map-screen.jpg");
+		this.startScreenImage = loader.loadImage("/start-screen2.png");
+
 		this.helpScreenImage = loader.loadImage("/help-screen.png");
 		this.aboutScreenImage = loader.loadImage("/about-screen.png");
 		this.gameOverScreen = loader.loadImage("/game-over.png");
-		this.gameScore = loader.loadImage("/game-score.jpg");
+		this.gameScore=loader.loadImage("/game-score.jpg");
 		try {
 			InputStream in = getClass().getResourceAsStream("/media/font/mario-font.ttf");
 			gameFont = Font.createFont(Font.TRUETYPE_FONT, in);
@@ -61,7 +58,6 @@ public class UIManager extends JPanel {
 			e.printStackTrace();
 		}
 	}
-
 	public static UIManager getInstance(GameEngine engine, int width, int height) {
         if (instance == null) {
             instance = new UIManager(engine, width, height);
@@ -78,7 +74,7 @@ public class UIManager extends JPanel {
 		if (gameStatus == GameStatus.START_SCREEN) {
 			drawStartScreen(g2);
 		} else if (gameStatus == GameStatus.MAP_SELECTION) {
-
+			
 			drawMapSelectionScreen(g2);
 		} else if (gameStatus == GameStatus.ABOUT_SCREEN) {
 			drawAboutScreen(g2);
@@ -86,32 +82,11 @@ public class UIManager extends JPanel {
 			drawHelpScreen(g2);
 		} else if (gameStatus == GameStatus.GAME_OVER) {
 			drawGameOverScreen(g2);
-		} else if (gameStatus == GameStatus.GAME_SCORE) {
-			List<MarioScore> scores = new ArrayList<>();
-			List<String> lines = readScoresFromFile("./src/media/score/score.txt");
-			if(lines.size()==0)
-			{
-				drawScoreList(g2, new ArrayList<>() , null);
-				return;
-			}
-			Pattern pattern = Pattern.compile("Mario: (\\d+) - Mario2: (\\d+) - Date: (.+)");
-			for (String line : lines) {
-				Matcher matcher = pattern.matcher(line);
-				if (matcher.matches()) {
-					int marioScore = Integer.parseInt(matcher.group(1));
-					int mario2Score = Integer.parseInt(matcher.group(2));
-					String dateString = matcher.group(3);
-
-					scores.add(new MarioScore(marioScore, mario2Score, dateString));
-				}
-			}
-
-			MarioScore recentPlay = scores.get(scores.size() - 1);
-			scores.sort(Comparator.comparingInt(MarioScore::getTotalScore).reversed());
+		} else if(gameStatus==GameStatus.GAME_SCORE){
 			
-			drawScoreList(g2, scores, recentPlay);
-		
-		
+			List<String> scores = readScoresFromFile("./src/media/score/score.txt"); // Specify the correct file name
+            drawScoreList(g2, scores);
+
 		} else {
 			Point camLocation = engine.getCameraLocation();
 			g2.translate(-camLocation.x, -camLocation.y);
@@ -129,15 +104,15 @@ public class UIManager extends JPanel {
 				drawVictoryScreen(g2);
 			}
 		}
-
+		
 		g2.dispose();
 	}
 
 	// private void drawRemainingTime(Graphics2D g2) {
-	// g2.setFont(gameFont.deriveFont(25f));
-	// g2.setColor(Color.WHITE);
-	// String displayedStr = "TIME: " + engine.getRemainingTime();
-	// g2.drawString(displayedStr, 800, 50);
+	// 	g2.setFont(gameFont.deriveFont(25f));
+	// 	g2.setColor(Color.WHITE);
+	// 	String displayedStr = "TIME: " + engine.getRemainingTime();
+	// 	g2.drawString(displayedStr, 800, 50);
 	// }
 
 	private void drawVictoryScreen(Graphics2D g2) {
@@ -168,6 +143,7 @@ public class UIManager extends JPanel {
 		g2.drawString(acquiredPoints, (getWidth() - stringLength) / 2, getHeight() - stringHeight * 2);
 	}
 
+	
 	private void drawPauseScreen(Graphics2D g2) {
 		g2.setFont(gameFont.deriveFont(50f));
 		g2.setColor(Color.WHITE);
@@ -199,9 +175,9 @@ public class UIManager extends JPanel {
 		String displayedStr = "Mario: " + engine.getScore();
 		displayedStr += " Mario2: " + engine.getScore2();
 		displayedStr += " TIME: " + engine.getRemainingTime();
-
+		
 		// int stringLength = g2.getFontMetrics().stringWidth(displayedStr);
-
+	
 		// g2.drawImage(coinIcon, 50, 10, null);
 		g2.drawString(displayedStr, 300, 50);
 	}
@@ -217,10 +193,9 @@ public class UIManager extends JPanel {
 	}
 
 	private void drawMapSelectionScreen(Graphics2D g2) {
-		
 		g2.setFont(gameFont.deriveFont(50f));
 		g2.setColor(Color.WHITE);
-		mapSelection.draw(g2, mapScreen,() -> this.getWidth(), () -> this.getHeight());
+		mapSelection.draw(g2, () -> this.getWidth(), () -> this.getHeight());
 
 		int row = engine.getSelectedMap();
 		int y_location = row * 100 + 300 - selectIcon.getHeight();
@@ -228,43 +203,34 @@ public class UIManager extends JPanel {
 		g2.drawImage(selectIcon, this.getWidth() / 4, y_location, null);
 	}
 
-	private void drawScoreList(Graphics2D g2, List<MarioScore> scores, MarioScore recentScore) {
+
+	private void drawScoreList(Graphics2D g2, List<String> scores) {
 		g2.drawImage(gameScore, 0, 0, this.getWidth(), this.getHeight(), null);
-		g2.setFont(gameFont.deriveFont(24f)); // Set the font size
-		g2.setColor(Color.WHITE); // Set the color
+        g2.setFont(gameFont.deriveFont(24f)); // Set the font size
+        g2.setColor(Color.WHITE); // Set the color
 
-		int x = 200; // X position to start drawing scores
-		int y = 200; // Starting Y position for the first score
-		int yDelta = 30; // Distance between scores
+        int x = 300; // X position to start drawing scores
+        int y = 100; // Starting Y position for the first score
+        int yDelta = 30; // Distance between scores
 
-		if (scores.size() == 0) {
-			g2.drawString("No score", x, y);
-			return;
-		}
+        for (String score : scores) {
+            g2.drawString(score, x, y);
+            y += yDelta; // Move down to the next line
+        }
+    }
 
-		var top20 = scores.subList(0, scores.size() > 20 ? 20 : scores.size());
-
-		g2.drawString("Leaderboard", (engine.screenSize.width / 2) - ("Leaderboard").length() * 16, 150);
-		for (MarioScore score : top20) {
-			g2.drawString(String.format("%-2d", top20.indexOf(score) + 1) + " - " + score.toString(), x, y);
-			y += yDelta; // Move down to the next line
-		}
-
-		g2.drawString("Recent: " + recentScore.toString(), x, engine.screenSize.height - 300);
-	}
-
-	private List<String> readScoresFromFile(String fileName) {
-		List<String> scores = new ArrayList<>();
-		try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				scores.add(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return scores;
-	}
+	 private List<String> readScoresFromFile(String fileName) {
+        List<String> scores = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                scores.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return scores;
+    }
 
 	public String selectMapViaMouse(Point mouseLocation) {
 		return mapSelection.selectMap(mouseLocation);

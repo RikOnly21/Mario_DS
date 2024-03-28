@@ -8,7 +8,7 @@ import model.hero.Mario;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class BoostItem extends GameObject implements Prize {
+public abstract class BoostItem extends GameObject {
 
 	private boolean revealed = false;
 	private int point;
@@ -19,8 +19,9 @@ public abstract class BoostItem extends GameObject implements Prize {
 	}
 
 	public abstract void onTouch(Mario mario, GameEngine engine);
+        
+        public abstract void onTouch2(Mario mario2, GameEngine engine);
 
-	@Override
 	public int getPoint() {
 		return point;
 	}
@@ -39,7 +40,6 @@ public abstract class BoostItem extends GameObject implements Prize {
 		}
 	}
 
-	@Override
 	public void reveal() {
 		setY(getY() - 48);
 		revealed = true;

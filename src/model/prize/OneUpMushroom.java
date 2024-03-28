@@ -6,7 +6,7 @@ import model.hero.Mario;
 
 import java.awt.image.BufferedImage;
 
-public class OneUpMushroom extends BoostItem {
+public class OneUpMushroom extends BoostItem{
 
 	public OneUpMushroom(double x, double y, BufferedImage style) {
 		super(x, y, style);
@@ -19,8 +19,7 @@ public class OneUpMushroom extends BoostItem {
 		mario.setRemainingLives(mario.getRemainingLives() + 1);
 		engine.playOneUp();
 	}
-
-	@Override
+        @Override
 	public void onTouch2(Mario mario2, GameEngine engine) {
 		mario2.acquirePoints(getPoint());
 		mario2.setRemainingLives(mario2.getRemainingLives() + 1);

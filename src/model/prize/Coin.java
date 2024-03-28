@@ -8,7 +8,7 @@ import model.hero.Mario;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Coin extends GameObject implements Prize {
+public class Coin extends GameObject{
 
 	private int point;
 	private boolean revealed, acquired = false;
@@ -22,17 +22,14 @@ public class Coin extends GameObject implements Prize {
 		revealBoundary = (int) getY() - getDimension().height;
 	}
 
-	@Override
 	public int getPoint() {
 		return point;
 	}
 
-	@Override
 	public void reveal() {
 		revealed = true;
 	}
 
-	@Override
 	public void onTouch(Mario mario, GameEngine engine) {
 		if (!acquired) {
 			acquired = true;
@@ -42,7 +39,6 @@ public class Coin extends GameObject implements Prize {
 		}
 	}
 
-	@Override
 	public void onTouch2(Mario mario2, GameEngine engine) {
 		if (!acquired) {
 			acquired = true;

@@ -27,9 +27,10 @@ public enum StartScreenSelection {
 
 		if (lineNumber > -1 && lineNumber < 4) {
 			selection = lineNumber - (toUp ? 1 : -1);
-
-			if (selection == -1) selection = 3;
-			else if (selection == 4) selection = 0;
+			if (selection == -1)
+				selection = 2;
+			else if (selection == 4)
+				selection = 0;
 			return getSelection(selection);
 		}
 

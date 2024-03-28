@@ -1,24 +1,34 @@
 package manager;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.Random;
+
 import model.EndFlag;
-import model.brick.*;
-import model.prize.*;
-import view.ImageLoader;
-import model.Map;
+import model.brick.Brick;
+import model.brick.ConcreteCreateGroundBrick;
+import model.brick.ConcreteCreateOrdinaryBirck;
+import model.brick.ConcreteCreatePipe;
+import model.brick.ConcreteCreateSurpriseBrick;
+import model.brick.IBirckFactory;
 import model.enemy.ConcreteCreateGoomba;
 import model.enemy.ConcreteCreateKoopaTroopa;
-
 import model.enemy.Enemy;
 import model.enemy.Goomba;
 import model.enemy.IEnemyFactory;
 import model.enemy.KoopaTroopa;
 import model.hero.Mario;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Random;
+import model.hero.Mario.MarioBuilder;
+import model.prize.Coin;
+import model.prize.CollectableAdapter;
+import model.prize.FireFlower;
+import model.prize.OneUpMushroom;
+import model.prize.Prize;
+import model.prize.SuperMushroom;
+import view.ImageLoader;
 
 class MapCreator {
+
 	private ImageLoader imageLoader;
 	private Random random;
 
@@ -28,7 +38,6 @@ class MapCreator {
 	private BufferedImage goombaLeft, goombaRight, koopaLeft, koopaRight, endFlag;
 	private IBirckFactory brickFactory;
 	private IEnemyFactory enemyfactory;
-
 	public MapCreator(ImageLoader imageLoader) {
 		this.imageLoader = imageLoader;
 		this.random = new Random();
@@ -40,10 +49,10 @@ class MapCreator {
 		this.oneUpMushroom = imageLoader.getSubImage(sprite, 3, 5, 48, 48);
 		this.fireFlower = imageLoader.getSubImage(sprite, 4, 5, 48, 48);
 		this.coin = imageLoader.getSubImage(sprite, 1, 5, 48, 48);
-		this.ordinaryBrick = imageLoader.getSubImage(sprite, 1, 1, 48, 48);// cục gạch phá đc
+		this.ordinaryBrick = imageLoader.getSubImage(sprite, 1, 1, 48, 48);//cục gạch phá đc
 		this.surpriseBrick = imageLoader.getSubImage(sprite, 2, 1, 48, 48);
-		this.groundBrick = imageLoader.getSubImage(sprite, 2, 2, 48, 48);// bậc thang
-		this.pipe = imageLoader.getSubImage(sprite, 3, 1, 96, 96);// ống
+		this.groundBrick = imageLoader.getSubImage(sprite, 2, 2, 48, 48);//bậc thang
+		this.pipe = imageLoader.getSubImage(sprite, 3, 1, 96, 96);//ống
 		this.goombaLeft = imageLoader.getSubImage(sprite, 2, 4, 48, 48);
 		this.goombaRight = imageLoader.getSubImage(sprite, 5, 4, 48, 48);
 		this.koopaLeft = imageLoader.getSubImage(sprite, 1, 3, 48, 64);
@@ -83,49 +92,46 @@ class MapCreator {
 				int yLocation = y * pixelMultiplier;
 
 				if (currentPixel == ordinaryBrick) {
-					brickFactory = new ConcreteCreateOrdinaryBirck();
-					Brick brick = brickFactory.createBrick(xLocation, yLocation, this.ordinaryBrick, null);
+					brickFactory= new ConcreteCreateOrdinaryBirck();
+					Brick brick = brickFactory.createBrick(xLocation, yLocation, this.ordinaryBrick,null);
 					createdMap.addBrick(brick);
 				} else if (currentPixel == surpriseBrick) {
 					Prize prize = generateRandomPrize(xLocation, yLocation);
-					brickFactory = new ConcreteCreateSurpriseBrick();
+					brickFactory= new ConcreteCreateSurpriseBrick();
 					Brick brick = brickFactory.createBrick(xLocation, yLocation, this.surpriseBrick, prize);
 					createdMap.addBrick(brick);
 				} else if (currentPixel == pipe) {
-					brickFactory = new ConcreteCreatePipe();
-					Brick brick = brickFactory.createBrick(xLocation, yLocation, this.pipe, null);
+					brickFactory= new ConcreteCreatePipe();
+					Brick brick = brickFactory.createBrick(xLocation, yLocation, this.pipe,null);
 					createdMap.addGroundBrick(brick);
 				} else if (currentPixel == groundBrick) {
-					brickFactory = new ConcreteCreateGroundBrick();
-					Brick brick = brickFactory.createBrick(xLocation, yLocation, this.groundBrick, null);
+					brickFactory=new ConcreteCreateGroundBrick();
+					Brick brick = brickFactory.createBrick(xLocation, yLocation, this.groundBrick,null);
 					createdMap.addGroundBrick(brick);
 				} else if (currentPixel == goomba) {
-					enemyfactory = new ConcreteCreateGoomba();
+					enemyfactory= new ConcreteCreateGoomba();
 					Enemy enemy = enemyfactory.createEnemy(xLocation, yLocation, this.goombaLeft);
 					((Goomba) enemy).setRightImage(goombaRight);
 					createdMap.addEnemy(enemy);
 				} else if (currentPixel == koopa) {
-					enemyfactory = new ConcreteCreateKoopaTroopa();
-					Enemy enemy = enemyfactory.createEnemy(xLocation, yLocation, this.koopaLeft);
+					enemyfactory= new ConcreteCreateKoopaTroopa();
+					Enemy enemy =  enemyfactory.createEnemy(xLocation, yLocation, this.koopaLeft);
 					((KoopaTroopa) enemy).setRightImage(koopaRight);
 					createdMap.addEnemy(enemy);
 				} else if (currentPixel == mario) {
-					Mario marioObject = new Mario(xLocation, yLocation, "mario");
-					createdMap.setMario(marioObject, "mario");
+                                    //builder design pattern
+					Mario marioObject = new MarioBuilder().addX(xLocation).addY(yLocation).addWhichMario("mario").build();
+					createdMap.setMario(marioObject,"mario");
+
 				} else if (currentPixel == mario2) {
-					Mario mario2Object = new Mario(xLocation, yLocation, "mario2");
-					createdMap.setMario(mario2Object, "mario2");
+                                    //builder design pattern
+					Mario mario2Object = new MarioBuilder().addX(xLocation).addY(yLocation).addWhichMario("mario2").build();
+					createdMap.setMario(mario2Object,"mario2");
 				} else if (currentPixel == end) {
 					EndFlag endPoint = new EndFlag(xLocation + 24, yLocation, endFlag);
 					createdMap.setEndPoint(endPoint);
 				}
 			}
-		}
-
-		var mapName = mapPath.split("/")[2];
-		if (mapName.startsWith("Test")) {
-			createdMap.getMario("mario").acquirePoints(50000);
-			createdMap.getMario("mario2").acquirePoints(10000);
 		}
 
 		System.out.println("Map is created..");
@@ -135,15 +141,16 @@ class MapCreator {
 	private Prize generateRandomPrize(double x, double y) {
 		Prize generated;
 		int random = this.random.nextInt(6);
-
+                
+                //adapter design pattern
 		if (random == 0) { // super mushroom
-			generated = new SuperMushroom(x, y, this.superMushroom);
+			generated = new CollectableAdapter(new SuperMushroom(x, y, this.superMushroom));
 		} else if (random == 1) { // fire flower
-			generated = new FireFlower(x, y, this.fireFlower);
+			generated = new CollectableAdapter(new FireFlower(x, y, this.fireFlower));
 		} else if (random == 2) { // one up mushroom
-			generated = new OneUpMushroom(x, y, this.oneUpMushroom);
+			generated = new CollectableAdapter(new OneUpMushroom(x, y, this.oneUpMushroom));
 		} else { // coin
-			generated = new Coin(x, y, this.coin, 50);
+			generated = new CollectableAdapter(new Coin(x, y, this.coin, 50));
 		}
 
 		return generated;

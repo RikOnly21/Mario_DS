@@ -13,9 +13,7 @@ import javax.swing.WindowConstants;
 import manager.ScoreManager.GameObserver;
 import manager.ScoreManager.GameSubject;
 import manager.ScoreManager.ScoreSaver;
-import model.hero.IMario;
 import model.hero.Mario;
-
 import view.ImageLoader;
 import view.StartScreenSelection;
 import view.UIManager;
@@ -66,7 +64,7 @@ public class GameEngine extends GameSubject implements Runnable {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
-		KeyBindingManager inputManager = new KeyBindingManager(this, frame);
+		KeyBindingManager KeyBindingManager = new KeyBindingManager(this, frame);
 
 		start();
 	}
@@ -168,8 +166,8 @@ public class GameEngine extends GameSubject implements Runnable {
 		int missionPassed = passMission();
 		if (missionPassed > -1) {
 			mapManager.acquirePoints(missionPassed, "mario");
-			mapManager.acquirePoints(missionPassed, "mario2");
-
+			setGameStatus(GameStatus.MISSION_PASSED);
+		} else if (mapManager.endLevel()) {
 			setGameStatus(GameStatus.MISSION_PASSED);
 			endGame();
 		}
@@ -177,11 +175,7 @@ public class GameEngine extends GameSubject implements Runnable {
 
 	private void updateCamera() {
 		Mario mario = mapManager.getMario("mario");
-		
-		IMario i_mario= new Mario(mario);
-		Mario mario2= i_mario.clone();
-
-		mario2.setWhichMario("mario2");
+		Mario mario2 = mapManager.getMario("mario2");
 
 		double marioX = mario.getX();
 		double mario2X = mario2.getX();
@@ -240,16 +234,16 @@ public class GameEngine extends GameSubject implements Runnable {
 
 		Mario mario2 = mapManager.getMario("mario2");
 
-		if (input == ButtonAction.M2_JUMP) {
+		if (input == ButtonAction.M_JUMP) {
 			mario2.jump(this);
-		} else if (input == ButtonAction.M2_RIGHT) {
+		} else if (input == ButtonAction.M_RIGHT) {
 			mario2.move(true, camera);
-		} else if (input == ButtonAction.M2_LEFT) {
+		} else if (input == ButtonAction.M_LEFT) {
 			mario2.move(false, camera);
-		} else if (input == ButtonAction.ACTION_COMPLETED2) {
+		} else if (input == ButtonAction.ACTION_COMPLETED) {
 			mario2.setVelX(0);
-		} else if (input == ButtonAction.M2_FIRE) {
-			mapManager.fire2(this);
+		} else if (input == ButtonAction.M_FIRE) {
+			mapManager.fire(this);
 		}
 	}
 
@@ -428,8 +422,10 @@ public class GameEngine extends GameSubject implements Runnable {
 	}
 
 	private void endGame() {
+
 		// Thông báo cho observers
 		notifyObservers();
+
 	}
 
 	public static void main(String... args) {

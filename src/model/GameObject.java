@@ -3,7 +3,7 @@ package model;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class GameObject {
+public abstract class GameObject implements UIDesign{
 
 	private double x, y;
 
@@ -36,7 +36,8 @@ public abstract class GameObject {
 		jumping = false;
 		falling = true;
 	}
-
+        
+        @Override
 	public void draw(Graphics g) {
 		BufferedImage style = getStyle();
 
